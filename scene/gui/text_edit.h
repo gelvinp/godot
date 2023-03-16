@@ -68,7 +68,8 @@ public:
 	/* Line Wrapping.*/
 	enum LineWrappingMode {
 		LINE_WRAPPING_NONE,
-		LINE_WRAPPING_BOUNDARY
+		LINE_WRAPPING_BOUNDARY,
+		LINE_WRAPPING_ADAPTIVE,
 	};
 
 	/* Gutters. */
@@ -251,6 +252,10 @@ private:
 		/* Line style. */
 		void set_line_background_color(int p_line, const Color &p_color) { text.write[p_line].background_color = p_color; }
 		const Color get_line_background_color(int p_line) const { return text[p_line].background_color; }
+
+		/* Line brk_flags. */
+		void set_line_break_flags(int p_line, BitField<TextServer::LineBreakFlag> p_flags) { text.write[p_line].data_buf->set_break_flags(p_flags); }
+		const BitField<TextServer::LineBreakFlag> get_line_break_flags(int p_line) { text[p_line].data_buf->get_break_flags(); }
 	};
 
 	/* Text */

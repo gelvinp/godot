@@ -5238,6 +5238,21 @@ void TextEdit::delete_selection(int p_caret) {
 void TextEdit::set_line_wrapping_mode(LineWrappingMode p_wrapping_mode) {
 	if (line_wrapping_mode != p_wrapping_mode) {
 		line_wrapping_mode = p_wrapping_mode;
+
+		// Update brk_flags for each line
+		if (line_wrapping_mode == LINE_WRAPPING_ADAPTIVE) {
+			for (int line = 0; line < text.size(); ++line)
+			{
+				text.set_line_break_flags(line, TextServer::BREAK_MANDATORY | TextServer::BREAK_WORD_BOUND | TextServer::BREAK_ADAPTIVE);
+			}
+		}
+		else {
+			for (int line = 0; line < text.size(); ++line)
+			{
+				text.set_line_break_flags(line, TextServer::BREAK_MANDATORY | TextServer::BREAK_WORD_BOUND);
+			}
+		}
+
 		_update_wrap_at_column(true);
 	}
 }
@@ -6253,6 +6268,7 @@ void TextEdit::_bind_methods() {
 	/* Line wrapping. */
 	BIND_ENUM_CONSTANT(LINE_WRAPPING_NONE);
 	BIND_ENUM_CONSTANT(LINE_WRAPPING_BOUNDARY);
+	BIND_ENUM_CONSTANT(LINE_WRAPPING_ADAPTIVE);
 
 	// internal.
 	ClassDB::bind_method(D_METHOD("_update_wrap_at_column", "force"), &TextEdit::_update_wrap_at_column, DEFVAL(false));
@@ -6394,7 +6410,7 @@ void TextEdit::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "drag_and_drop_selection_enabled"), "set_drag_and_drop_selection_enabled", "is_drag_and_drop_selection_enabled");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "virtual_keyboard_enabled"), "set_virtual_keyboard_enabled", "is_virtual_keyboard_enabled");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "middle_mouse_paste_enabled"), "set_middle_mouse_paste_enabled", "is_middle_mouse_paste_enabled");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "wrap_mode", PROPERTY_HINT_ENUM, "None,Boundary"), "set_line_wrapping_mode", "get_line_wrapping_mode");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "wrap_mode", PROPERTY_HINT_ENUM, "None,Boundary,Adaptive"), "set_line_wrapping_mode", "get_line_wrapping_mode");
 
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "highlight_all_occurrences"), "set_highlight_all_occurrences", "is_highlight_all_occurrences_enabled");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "highlight_current_line"), "set_highlight_current_line", "is_highlight_current_line_enabled");

@@ -1383,6 +1383,9 @@
 		<constant name="LINE_WRAPPING_BOUNDARY" value="1" enum="LineWrappingMode">
 			Line wrapping occurs at the control boundary, beyond what would normally be visible.
 		</constant>
+		<constant name="LINE_WRAPPING_ADAPTIVE" value="2" enum="LineWrappingMode">
+			Line wrapping occurs between any unconnected graphemes, if it's impossible to break it between the words.
+		</constant>
 		<constant name="GUTTER_TYPE_STRING" value="0" enum="GutterType">
 			Draw a string.
 		</constant>
