@@ -5241,14 +5241,12 @@ void TextEdit::set_line_wrapping_mode(LineWrappingMode p_wrapping_mode) {
 
 		// Update brk_flags for each line
 		if (line_wrapping_mode == LINE_WRAPPING_ADAPTIVE) {
-			for (int line = 0; line < text.size(); ++line)
-			{
+			for (int line = 0; line < text.size(); ++line) {
 				text.set_line_break_flags(line, TextServer::BREAK_MANDATORY | TextServer::BREAK_WORD_BOUND | TextServer::BREAK_ADAPTIVE);
 			}
 		}
 		else {
-			for (int line = 0; line < text.size(); ++line)
-			{
+			for (int line = 0; line < text.size(); ++line) {
 				text.set_line_break_flags(line, TextServer::BREAK_MANDATORY | TextServer::BREAK_WORD_BOUND);
 			}
 		}
@@ -7711,6 +7709,12 @@ void TextEdit::_base_insert_text(int p_line, int p_char, const String &p_text, i
 	}
 
 	text.insert(p_line, substrings, bidi_override);
+
+	if (line_wrapping_mode == LINE_WRAPPING_ADAPTIVE) {
+		for (int line = 0; line < text.size(); ++line) {
+			text.set_line_break_flags(line, TextServer::BREAK_MANDATORY | TextServer::BREAK_WORD_BOUND | TextServer::BREAK_ADAPTIVE);
+		}
+	}
 
 	if (shift_first_line) {
 		text.move_gutters(p_line, p_line + 1);
