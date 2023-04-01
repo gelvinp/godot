@@ -1604,6 +1604,40 @@ void Node3DEditorViewport::_sinput(const Ref<InputEvent> &p_event) {
 					scale_cursor_distance(zoom_factor);
 				}
 			} break;
+			case MouseButton::WHEEL_LEFT: {
+				if (is_freelook_active()) {
+					scale_freelook_speed(1.0 / zoom_factor);
+				} else {
+					float factor = b->get_factor();
+					float sensitivity = EDITOR_GET("editors/3d/navigation_feel/horizontal_scroll_orbit_sensitivity");
+					
+					// Factor may be zero if not supported by the platform
+					if (factor == 0) {
+						factor = 1.0;
+					}
+
+					factor *= sensitivity;
+
+					_nav_orbit(p_event, Vector2{ factor, 0.0 });
+				}
+			} break;
+			case MouseButton::WHEEL_RIGHT: {
+				if (is_freelook_active()) {
+					scale_freelook_speed(zoom_factor);
+				} else {
+					float factor = b->get_factor();
+					float sensitivity = EDITOR_GET("editors/3d/navigation_feel/horizontal_scroll_orbit_sensitivity");
+					
+					// Factor may be zero if not supported by the platform
+					if (factor == 0) {
+						factor = 1.0;
+					}
+
+					factor *= sensitivity;
+
+					_nav_orbit(p_event, Vector2{ -factor, 0.0 });
+				}
+			} break;
 			case MouseButton::RIGHT: {
 				NavigationScheme nav_scheme = (NavigationScheme)EDITOR_GET("editors/3d/navigation/navigation_scheme").operator int();
 
